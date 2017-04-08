@@ -100,7 +100,9 @@ def get_images(url , saveloc = './') :
 			# 	for chunk in r.iter_content(chunk_size = 256) :
 			# 		fd.write(chunk)
 
-
+		except KeyboardInterrupt :
+			print 'KeyboardInterrupt' 
+			exit()
 
 		except :
 			print ('Error occured , Continuing ...')

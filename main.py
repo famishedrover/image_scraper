@@ -11,16 +11,27 @@ import os
 def create_output(dirname  , saveloc = './') :
 	print 'Given save location ',saveloc
 	
+	if saveloc == '/' :
+		saveloc = './'
+		#PERMISSION DENIED TO HOME DIR.
 
-	try :
-		dirs = os.listdir(saveloc)
-	except :
-		print 'Supplied Save Location NOT FOUND. ',
-		print 'Save Location set to Current Working Directory'
-		print 'Directory name set to Default - output'
-		dirname = 'output'
-		dirs = os.listdir('./')
+	if os.path.isdir(saveloc) :
+		pass
+		# INVALID PATH 
+	else :
+		saveloc = './'
+		print 'Given Path DNE , Save Location changed to CWD ./ '
 
+	# try :
+	# 	dirs = os.listdir(saveloc)
+	# except :
+	# 	print 'Supplied Save Location NOT FOUND. ',
+	# 	print 'Save Location set to Current Working Directory'
+	# 	print 'Directory name set to Default - output'
+	# 	dirname = 'output'
+	# 	dirs = os.listdir('./')
+
+	dirs = os.listdir(saveloc)
 	originaldirname = dirname
 	cnt = 0
 	num = str(cnt)
@@ -33,7 +44,7 @@ def create_output(dirname  , saveloc = './') :
 	try :
 		os.mkdir(saveloc + dirname)
 	except:
-		os.mkdir('./'+ dirname)
+		os.mkdir(dirname)
 		print 'Save Location set to Current Working Directory'
 	
 	print dirname ,'named Directory created.',
@@ -56,7 +67,25 @@ def make_soup (url) :
 	return BeautifulSoup(html , 'html.parser')
 
 
-def get_images(url , saveloc = './') :
+
+def img_linkparser(url) :
+	soup = make_soup(url)
+	#found all images html.
+	images = [img for img in soup.findAll('img')]
+	print (len(images) , 'Images Found!')
+	image_links = [eachimg.get('src') for eachimg in images]
+	for imglink in image_links :
+		print imglink
+
+		src = urljoin(url , imglink)
+		print src
+
+
+
+
+
+def get_images(url , saveloc = './' , delay = 0.5) :
+
 	soup = make_soup(url)
 	#found all images html.
 	images = [img for img in soup.findAll('img')]
@@ -78,9 +107,12 @@ def get_images(url , saveloc = './') :
 
 	image_links = [eachimg.get('src') for eachimg in images]
 
+
+
+	
 	for eachimg in image_links :
 		try :
-			#Finding the name of the file. 
+		#Finding the name of the file. 
 			filename = eachimg.strip().split('/')[-1].strip()
 
 			#src tag
@@ -88,17 +120,19 @@ def get_images(url , saveloc = './') :
 
 			print ('Retreiving ' + filename)
 			r = requests.get(src , stream = True)
-			time.sleep(1)		#delay
+			
+		
+			time.sleep(delay)		#delay
 
-			#saving.
-			with open(savedir + '/' + filename, 'wb') as of :
-				shutil.copyfileobj(r.raw,of)
+			# #saving. method 1 
+			# with open(savedir + '/' + filename, 'wb') as of :
+			# 	shutil.copyfileobj(r.raw,of)
 
-
-			#below method dosen't work.
-			# with open(filename , 'wb') as of :
-			# 	for chunk in r.iter_content(chunk_size = 256) :
-			# 		fd.write(chunk)
+			filename = filename.replace('-' , '')
+			# method 2 better method
+			with open(str(savedir + '/' + filename) , 'wb') as f :
+				for chunk in r.iter_content(chunk_size = 128) :
+					f.write(chunk)
 
 		except KeyboardInterrupt :
 			print 'KeyboardInterrupt' 
@@ -106,6 +140,8 @@ def get_images(url , saveloc = './') :
 
 		except :
 			print ('Error occured , Continuing ...')
+
+	
 	print ('Completed!')
 
 
@@ -126,5 +162,5 @@ if __name__ == '__main__' :
 
 
 	get_images(url , saveloc = dirpath)
-
+	# img_linkparser(url)
 

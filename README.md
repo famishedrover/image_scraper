@@ -9,6 +9,7 @@ python main.py [savelocation]/[dirname] [url]
 
 
 eg. python main.py /Users/famishedrover/Desktop/mydir www.somewebsite/imageurl
+
 [savelocation] 	: Wherever you want to save the retrieved image.
 [dirname] 		: Name of directory to be created.
 [url] 			: url from which images are to be retieved.

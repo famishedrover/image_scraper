@@ -5,6 +5,12 @@
 	BeautifulSoup
 
 
+
+python convert_extension [dirpath]
+Converts all the files in the dirpath to .jpg
+
+
+
 python main.py [savelocation]/[dirname] [url]
 
 

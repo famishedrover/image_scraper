@@ -110,6 +110,8 @@ def get_images(url , saveloc = './') :
 
 
 
+
+
 if __name__ == '__main__' :
 	try :
 		url = argv[2]

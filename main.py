@@ -8,10 +8,13 @@ from sys import argv
 import time
 import os 
 
+DEFAULT_DIR = 'output'
+
 def create_output(dirname  , saveloc = './') :
 	print 'Given save location ',saveloc
 	
 	if saveloc == '/' :
+		print 'Home Access Denied , Save Location changed to CWD ./ '
 		saveloc = './'
 		#PERMISSION DENIED TO HOME DIR.
 
@@ -97,6 +100,9 @@ def get_images(url , saveloc = './' , delay = 0.5) :
 	get_dir()
 	dirpath = '/'.join(saveloc.split('/')[:-1]) + '/'
 	dirname = saveloc.split('/')[-1]
+	if dirname == '' :
+		print 'No dirname Supplied : Changed to %s'%DEFAULT_DIR
+		dirname = DEFAULT_DIR
 	savedir = create_output(dirname , dirpath)
 
 
@@ -158,7 +164,7 @@ if __name__ == '__main__' :
 		dirpath = argv[1]
 	except :
 		currdir = os.getcwd()
-		dirpath = currdir + '/output'
+		dirpath = currdir + '/%s'%DEFAULT_DIR
 
 
 	get_images(url , saveloc = dirpath)

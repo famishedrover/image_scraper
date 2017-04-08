@@ -4,6 +4,7 @@ import shutil
 import requests
 from urlparse import urljoin
 import sys 
+from sys import argv
 import time
 
 
@@ -58,7 +59,10 @@ def get_images(url) :
 
 
 if __name__ == '__main__' :
-	url = 'https://en.wikipedia.org/wiki/Image'
+	try :
+		url = argv[1]
+	except :
+		url = 'https://en.wikipedia.org/wiki/Image'
 	get_images(url)
 
 
